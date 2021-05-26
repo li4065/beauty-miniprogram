@@ -21,12 +21,15 @@ export default class Index extends Component {
         Action: 'GetModelList',
         Version: '2019-12-13',
         Region: 'ap-shanghai',
-        Timestamp: '2019-12-13'
+        Timestamp: 1529223702,
+        Nonce: 20,
+        SecretId: 'AKIDObYEemeLlulMgiT3NPAftqWv5yavznJY',
+        // SecretKey: '3qMbZGfneGbeQwA7nCKBl47sMZVAXdRy'
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success (res) {
+      success(res) {
         console.log(res.data)
       }
     })
