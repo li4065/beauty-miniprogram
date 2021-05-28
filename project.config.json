@@ -17,6 +17,7 @@
 		"useCompilerModule": false
 	},
 	"compileType": "miniprogram",
+	"cloudbaseRoot": "cloudbase/",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {}

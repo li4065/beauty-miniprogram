@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { View, Text, Button, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
+// import tencentcloud from 'tencentcloud-sdk-nodejs';
 // import { AtButton } from 'taro-ui'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
@@ -14,22 +15,26 @@ export default class Index extends Component {
 
   componentWillMount() { }
 
-  componentDidMount() {
-    Taro.request({
-      url: 'https://fmu.tencentcloudapi.com/?Action=GetModelList', //仅为示例，并非真实的接口地址
+  async componentDidMount() {
+    const res = await Taro.request({
+      url: 'http://localhost:3000/DetectFaceAttributes',
       data: {
-        Action: 'GetModelList',
-        Version: '2019-12-13',
-        Region: 'ap-shanghai',
-        Timestamp: '2019-12-13'
+        "Url": "https://image-1300636809.cos.ap-nanjing.myqcloud.com/%E5%85%A5%E8%81%8C2.jpg"
       },
-      header: {
-        'content-type': 'application/json' // 默认值
+      method: 'POST',
+    });
+    const { FaceDetailInfos } = res.data;
+    const { FaceRect } = FaceDetailInfos[0]; // 获取面容尺寸
+    const imgSrc = await Taro.request({
+      url: 'http://localhost:3000/TryLipstickPic',
+      data: {
+        Url: 'https://image-1300636809.cos.ap-nanjing.myqcloud.com/%E5%85%A5%E8%81%8C2.jpg',
+        LipColorInfos: [{"RGBA":{"R":255,"G":220,"B":0,"A":50}, FaceRect }],
+        RspImgType: 'url'
       },
-      success (res) {
-        console.log(res.data)
-      }
-    })
+      method: 'POST',
+    });
+    console.log('处理后的图片', imgSrc);
   }
 
   componentWillUnmount() { }
@@ -59,6 +64,7 @@ export default class Index extends Component {
         <Button onClick={this.uploadImg}>上传照片</Button>
         <Image
           className='image'
+          mode='widthFix'
           src={tempFilePaths}
         />
       </View>
